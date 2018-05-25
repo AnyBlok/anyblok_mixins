@@ -13,6 +13,7 @@ from anyblok_mixins.release import version
 class AnyBlokWorkFlow(Blok):
     version = version
     author = 'Suzanne Jean-Sébastien'
+    required = ['anyblok-mixins']
 
     @classmethod
     def import_declaration_module(cls):
