@@ -9,6 +9,20 @@
 Mixins
 ~~~~~~
 
+.. automodule:: anyblok_mixins.mixins.basic
+
+.. autoanyblok-declaration:: IdColumn
+    :members:
+    :show-iheritance:
+
+.. autoanyblok-declaration:: UuidColumn
+    :members:
+    :show-iheritance:
+
+.. autoanyblok-declaration:: TrackModel
+    :members:
+    :show-iheritance:
+
 .. automodule:: anyblok_mixins.mixins.readonly
 
 .. autoanyblok-declaration:: ForbidUpdate

@@ -19,8 +19,11 @@ class AnyBlokMixins(Blok):
     @classmethod
     def import_declaration_module(cls):
         from . import readonly  # noqa
+        from . import basic  # noqa
 
     @classmethod
     def reload_declaration_module(cls, reload):
-        from . import readonly
-        reload(readonly)
+        from . import basic
+        reload(basic)
+        from . import basic
+        reload(basic)
