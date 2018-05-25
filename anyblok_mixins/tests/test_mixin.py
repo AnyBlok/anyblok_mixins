@@ -9,7 +9,7 @@
 from anyblok.tests.testcase import DBTestCase
 from anyblok import Declarations
 from anyblok.column import Integer, String, Boolean
-from anyblok.bloks.anyblok_core.exceptions import (
+from anyblok_mixins.mixins.exceptions import (
     ForbidDeleteException, ForbidUpdateException
 )
 register = Declarations.register

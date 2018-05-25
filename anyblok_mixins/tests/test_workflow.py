@@ -9,9 +9,10 @@
 from anyblok.tests.testcase import DBTestCase
 from anyblok import Declarations
 from anyblok.column import Integer, String
-from anyblok.bloks.anyblok_core.exceptions import (
-    ForbidDeleteException, ForbidUpdateException, WorkFlowException
+from anyblok_mixins.mixins.exceptions import (
+    ForbidDeleteException, ForbidUpdateException
 )
+from anyblok_mixins.workflow.exceptions import WorkFlowException
 from sqlalchemy.exc import StatementError
 register = Declarations.register
 unregister = Declarations.unregister
