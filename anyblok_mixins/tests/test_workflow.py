@@ -14,10 +14,18 @@ from anyblok_mixins.mixins.exceptions import (
 )
 from anyblok_mixins.workflow.exceptions import WorkFlowException
 from sqlalchemy.exc import StatementError
+from unittest import skipIf
+
 register = Declarations.register
 unregister = Declarations.unregister
 Mixin = Declarations.Mixin
 Model = Declarations.Model
+
+try:
+    from anyblok_mixins.workflow.marshmallow import SchemaValidator
+    has_marshmallow = True
+except ImportError as e:
+    has_marshmallow = False
 
 
 class TestWorkFlow(DBTestCase):
@@ -644,3 +652,88 @@ class TestWorkFlow(DBTestCase):
         test = registry.Test.insert()
         test.state_to('done')
         test.delete()
+
+    @skipIf(not has_marshmallow, "marshmallow is not installed")
+    def test_schema_validator(self):
+
+        from marshmallow import Schema, fields
+
+        class MySchema(Schema):
+            id = fields.Integer(required=True)
+            state = fields.String(required=True)
+            name = fields.String()
+
+        def add_in_registry():
+
+            @register(Model)
+            class Test(Mixin.WorkFlow):
+
+                WORKFLOW = {
+                    'draft': {'default': True,
+                              'allowed_to': ['done']},
+                    'done': {'validators': SchemaValidator(MySchema())},
+                }
+                id = Integer(primary_key=True)
+                name = String(default='')
+
+        registry = self.init_registry(add_in_registry)
+        test = registry.Test.insert()
+        test.state_to('done')
+        self.registry.flush()
+
+    @skipIf(not has_marshmallow, "marshmallow is not installed")
+    def test_schema_validator_2(self):
+
+        from marshmallow import Schema, fields, exceptions
+
+        class MySchema(Schema):
+            id = fields.Integer(required=True)
+            state = fields.String(required=True)
+            name = fields.String(required=True)
+
+        def add_in_registry():
+
+            @register(Model)
+            class Test(Mixin.WorkFlow):
+
+                WORKFLOW = {
+                    'draft': {'default': True,
+                              'allowed_to': ['done']},
+                    'done': {'validators': SchemaValidator(MySchema())},
+                }
+                id = Integer(primary_key=True)
+                name = String()
+
+        registry = self.init_registry(add_in_registry)
+        test = registry.Test.insert()
+        with self.assertRaises(exceptions.ValidationError):
+            test.state_to('done')
+
+    @skipIf(not has_marshmallow, "marshmallow is not installed")
+    def test_schema_validator_3(self):
+
+        from marshmallow import Schema, fields, exceptions
+
+        class MySchema(Schema):
+            id = fields.Integer(required=True)
+            state = fields.String(required=True)
+            name = fields.String(required=True)
+
+        def add_in_registry():
+
+            @register(Model)
+            class Test(Mixin.WorkFlow):
+
+                WORKFLOW = {
+                    'draft': {'default': True,
+                              'allowed_to': ['done']},
+                    'done': {'validators': SchemaValidator(
+                        MySchema(), get_instance=lambda x: x)},
+                }
+                id = Integer(primary_key=True)
+                name = String()
+
+        registry = self.init_registry(add_in_registry)
+        test = registry.Test.insert()
+        with self.assertRaises(exceptions.ValidationError):
+            test.state_to('done')
