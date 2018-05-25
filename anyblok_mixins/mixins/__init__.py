@@ -23,7 +23,7 @@ class AnyBlokMixins(Blok):
 
     @classmethod
     def reload_declaration_module(cls, reload):
-        from . import basic
-        reload(basic)
+        from . import readonly
+        reload(readonly)
         from . import basic
         reload(basic)
