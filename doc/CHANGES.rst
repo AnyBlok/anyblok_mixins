@@ -13,3 +13,5 @@ CHANGELOG
 ------------------
 
 * Cherry pick mixins from anyblok-core
+* Add SchemaValidator method
+* Add basic mixins 
