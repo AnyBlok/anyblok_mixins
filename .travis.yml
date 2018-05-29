@@ -32,6 +32,7 @@ install:
   - pip install flake8
   - pip install coverage
   - pip install nose
+  - pip install masrhmallow --pre
   - pip install anyblok_marshmallow
   - pip install coveralls
   - python setup.py develop
