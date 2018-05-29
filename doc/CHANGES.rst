@@ -9,7 +9,7 @@
 CHANGELOG
 =========
 
-1.0.0
-------
+1.0.0 (2018-05-29)
+------------------
 
 * Cherry pick mixins from anyblok-core

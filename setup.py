@@ -23,15 +23,15 @@ with open(os.path.join(here, 'README.rst'), 'r', encoding='utf-8') as readme:
     README = readme.read()
 
 CHANGE = FRONT = ''
-# with open(
-#     os.path.join(here, 'doc', 'CHANGES.rst'), 'r', encoding='utf-8'
-# ) as change:
-#     CHANGE = change.read()
-#
-# with open(
-#     os.path.join(here, 'doc', 'FRONT.rst'), 'r', encoding='utf-8'
-# ) as front:
-#     FRONT = front.read()
+with open(
+    os.path.join(here, 'doc', 'CHANGES.rst'), 'r', encoding='utf-8'
+) as change:
+    CHANGE = change.read()
+
+with open(
+    os.path.join(here, 'doc', 'FRONT.rst'), 'r', encoding='utf-8'
+) as front:
+    FRONT = front.read()
 
 setup(
     name="anyblok_mixins",
