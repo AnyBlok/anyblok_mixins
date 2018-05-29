@@ -41,7 +41,7 @@ setup(
     description="add business mixins",
     license="MPL2",
     long_description=README + '\n' + FRONT + '\n' + CHANGE,
-    url="http://docs.anyblok.org/%s" % version,
+    url="https://anyblok-mixins.readthedocs.io/en/%s" % version,
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,

@@ -27,3 +27,5 @@ AnyBlok
 =======
 
 Add some mixins to help implementation of business models
+
+See the `latest documentation <https://anyblok-mixins.readthedocs.io/en/latest/>`_
