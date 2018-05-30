@@ -21,7 +21,7 @@
 .. image:: https://readthedocs.org/projects/anyblok_mixins/badge/?version=latest
     :alt: Documentation Status
     :scale: 100%
-    :target: https://doc.anyblok.org/en/latest/?badge=latest
+    :target: https://anyblok-mixins.readthedocs.io/en/latest/?badge=latest
 
 AnyBlok
 =======
