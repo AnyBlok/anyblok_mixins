@@ -41,7 +41,7 @@ class WorkFlow(Mixin.StateReadOnly):
             raise WorkFlowException(
                 "No workflow defined on the model %r" % cls)
 
-        return {key: value.get('label', key.capitalize)
+        return {key: value.get('label', key.capitalize())
                 for key, value in workflow.items()}
 
     def state_to(self, new_state):
