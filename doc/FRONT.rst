@@ -36,8 +36,8 @@ Running Tests
 
 To run framework tests with ``nose``::
 
-    pip install nose
-    nosetests anyblok_mixins/tests
+    pip install pytest pytest-cov
+    ANYBLOK_DATABASE_DRIVER=postgresql ANYBLOK_DATABASE_NAME=test_anyblok py.test anyblok_mixins/tests
 
 
 Contributing (hackers needed!)
@@ -49,3 +49,10 @@ Author
 ------
 
 Jean-Sébastien Suzanne
+
+Contributors
+------------
+
+* Jean-Sébastien Suzanne
+* Pierre Verkest
+* Hugo Quezada

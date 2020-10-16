@@ -23,16 +23,10 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst'), 'r', encoding='utf-8') as readme:
     README = readme.read()
 
-CHANGE = FRONT = ''
 with open(
     os.path.join(here, 'doc', 'CHANGES.rst'), 'r', encoding='utf-8'
 ) as change:
     CHANGE = change.read()
-
-with open(
-    os.path.join(here, 'doc', 'FRONT.rst'), 'r', encoding='utf-8'
-) as front:
-    FRONT = front.read()
 
 setup(
     name="anyblok_mixins",
@@ -41,7 +35,7 @@ setup(
     author_email="js.suzanne@gmail.com",
     description="add business mixins",
     license="MPL2",
-    long_description=README + '\n' + FRONT + '\n' + CHANGE,
+    long_description=README + '\n' + CHANGE,
     url="https://anyblok-mixins.readthedocs.io/en/%s" % version,
     packages=find_packages(),
     zip_safe=False,
