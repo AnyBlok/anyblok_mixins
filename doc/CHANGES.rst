@@ -9,6 +9,11 @@
 CHANGELOG
 =========
 
+1.0.1 (2020-10-16)
+------------------
+
+* Fixed get_state, where the capitalier is a function and is now executed
+
 1.0.0 (2018-05-29)
 ------------------
 
