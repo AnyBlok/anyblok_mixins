@@ -57,7 +57,7 @@ Add some mixins to help implementation of business models
 |                      |                    | * BooleanForbidUpdate : add forbid_update column  |
 |                      |                    | * BooleanForbidDelete : add forbid_delete column  |
 |                      |                    | * BooleanReadonly : add readonly column           |
-|                      |                    | * StateReadon : Need to overwrite the             |
+|                      |                    | * StateReadOnly : Need to overwrite the           |
 |                      |                    |   method check_if_forbid_update_condition_is_true | 
 |                      |                    |   and check_if_forbid_delete_condition_is_true    |
 +----------------------+--------------------+---------------------------------------------------+
