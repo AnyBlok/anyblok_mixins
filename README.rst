@@ -39,6 +39,7 @@ Add some mixins to help implementation of business models
 | Blok                 | Dependencies       | Description                                       |
 +======================+====================+===================================================+
 | **anyblok-mixins**   |                    | Add some Mixins to help developpers :             |
+|                      |                    |                                                   |
 |                      |                    | * IdColumn : add primary key id                   |
 |                      |                    | * UuidColumn : add primary key uuid               |
 |                      |                    | * TrackModel : add create_date and edit_date      |
