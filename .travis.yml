@@ -24,7 +24,7 @@ services:
 install:
   - pip install -U pip
   - pip install wheel
-  - pip install sqlalchemy $SQLPYCLIENT
+  - pip install sqlalchemy psycopg2
   - pip install -U flake8 coverage pytest pytest-cov
   - pip install anyblok_marshmallow
   - pip install coveralls
