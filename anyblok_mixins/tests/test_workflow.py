@@ -6,7 +6,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public License,
 # v. 2.0. If a copy of the MPL was not distributed with this file,You can
 # obtain one at http://mozilla.org/MPL/2.0/.
-from anyblok.tests.testcase import DBTestCase
+import pytest
+from anyblok.tests.conftest import init_registry_with_bloks
 from anyblok import Declarations
 from anyblok.column import Integer, String
 from anyblok_mixins.mixins.exceptions import (
@@ -24,14 +25,25 @@ Model = Declarations.Model
 try:
     from anyblok_mixins.workflow.marshmallow import SchemaValidator
     has_marshmallow = True
-except ImportError as e:
+except ImportError:
     has_marshmallow = False
 
 
-class TestWorkFlow(DBTestCase):
+class TestWorkFlow:
+
+    @pytest.fixture(autouse=True)
+    def close_registry(self, request, bloks_loaded):
+
+        def close():
+            if hasattr(self, 'registry'):
+                self.registry.close()
+
+        request.addfinalizer(close)
 
     def init_registry(self, func):
-        return self.init_registry_with_bloks(('anyblok-workflow',), func)
+        self.registry = init_registry_with_bloks(
+            ('anyblok-workflow',), func)
+        return self.registry
 
     def test_empty_workflow(self):
 
@@ -41,7 +53,7 @@ class TestWorkFlow(DBTestCase):
             class Test(Mixin.WorkFlow):
                 id = Integer(primary_key=True)
 
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             self.init_registry(add_in_registry)
 
     def test_simple_workflow_without_default_value(self):
@@ -58,7 +70,7 @@ class TestWorkFlow(DBTestCase):
                 id = Integer(primary_key=True)
 
         registry = self.init_registry(add_in_registry)
-        with self.assertRaises(StatementError):
+        with pytest.raises(StatementError):
             registry.Test.insert()
 
     def test_simple_workflow_with_default_value(self):
@@ -76,7 +88,7 @@ class TestWorkFlow(DBTestCase):
 
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
-        self.assertEqual(test.state, 'draft')
+        assert test.state == 'draft'
 
     def test_simple_workflow_with_two_default_value(self):
 
@@ -92,7 +104,7 @@ class TestWorkFlow(DBTestCase):
                 id = Integer(primary_key=True)
 
         registry = self.init_registry(add_in_registry)
-        with self.assertRaises(StatementError):
+        with pytest.raises(StatementError):
             registry.Test.insert()
 
     def test_simple_workflow_without_allowed_to(self):
@@ -111,7 +123,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state = 'done'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             registry.flush()
 
     def test_simple_workflow_with_unwanted_allowed_to(self):
@@ -130,7 +142,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state = 'done'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             registry.flush()
 
     def test_simple_workflow_with_allowed_to(self):
@@ -185,7 +197,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state = 'done'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             registry.flush()
 
     def test_simple_workflow_with_allowed_to_4(self):
@@ -230,7 +242,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state = 'done'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             registry.flush()
 
     def test_simple_workflow_with_allowed_to_6(self):
@@ -297,7 +309,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state = 'done'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             registry.flush()
 
     def test_simple_workflow_without_allowed_to_with_method(self):
@@ -315,7 +327,7 @@ class TestWorkFlow(DBTestCase):
 
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             test.state_to('done')
 
     def test_simple_workflow_with_unwanted_allowed_to_with_method(self):
@@ -334,7 +346,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state = 'done'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             test.state_to('done')
 
     def test_simple_workflow_with_allowed_to_with_method(self):
@@ -373,9 +385,9 @@ class TestWorkFlow(DBTestCase):
 
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
-        self.assertNotEqual(test.name, 'changed')
+        assert test.name != 'changed'
         test.state_to('done')
-        self.assertEqual(test.name, 'changed')
+        assert test.name == 'changed'
 
     def test_simple_workflow_change_state_with_apply_change_2(self):
 
@@ -396,9 +408,9 @@ class TestWorkFlow(DBTestCase):
 
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
-        self.assertNotEqual(test.name, 'changed')
+        assert test.name != 'changed'
         test.state_to('done')
-        self.assertEqual(test.name, 'changed')
+        assert test.name == 'changed'
 
     def test_simple_workflow_validators(self):
 
@@ -446,7 +458,7 @@ class TestWorkFlow(DBTestCase):
         test = registry.Test.insert()
         test.state_to('done')
         test.name = 'changed'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             self.registry.flush()
 
     def test_simple_workflow_validators_3(self):
@@ -495,7 +507,7 @@ class TestWorkFlow(DBTestCase):
         test = registry.Test.insert()
         test.state_to('done')
         test.name = 'changed'
-        with self.assertRaises(WorkFlowException):
+        with pytest.raises(WorkFlowException):
             self.registry.flush()
 
     def test_simple_workflow_validators_5(self):
@@ -541,7 +553,7 @@ class TestWorkFlow(DBTestCase):
         test = registry.Test.insert()
         test.state_to('done')
         test.name = 'changed'
-        with self.assertRaises(ForbidUpdateException):
+        with pytest.raises(ForbidUpdateException):
             self.registry.flush()
 
     def test_simple_workflow_readonly_2(self):
@@ -566,9 +578,9 @@ class TestWorkFlow(DBTestCase):
 
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
-        self.assertNotEqual(test.name, 'changed')
+        assert test.name != 'changed'
         test.state_to('done')
-        self.assertEqual(test.name, 'changed')
+        assert test.name == 'changed'
         self.registry.flush()
 
     def test_simple_workflow_readonly_is_not_deletable(self):
@@ -589,7 +601,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state_to('done')
-        with self.assertRaises(ForbidDeleteException):
+        with pytest.raises(ForbidDeleteException):
             test.delete()
 
     def test_simple_workflow_readonly_is_deletable(self):
@@ -630,7 +642,7 @@ class TestWorkFlow(DBTestCase):
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
         test.state_to('done')
-        with self.assertRaises(ForbidDeleteException):
+        with pytest.raises(ForbidDeleteException):
             test.delete()
 
     def test_simple_workflow_is_deletable(self):
@@ -706,7 +718,7 @@ class TestWorkFlow(DBTestCase):
 
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
-        with self.assertRaises(exceptions.ValidationError):
+        with pytest.raises(exceptions.ValidationError):
             test.state_to('done')
 
     @skipIf(not has_marshmallow, "marshmallow is not installed")
@@ -735,5 +747,5 @@ class TestWorkFlow(DBTestCase):
 
         registry = self.init_registry(add_in_registry)
         test = registry.Test.insert()
-        with self.assertRaises(exceptions.ValidationError):
+        with pytest.raises(exceptions.ValidationError):
             test.state_to('done')
