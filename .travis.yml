@@ -4,18 +4,15 @@ addons:
     postgresql: "9.6"
 
 python:
-  - "3.3"
-  - "3.4"
-  - "3.5"
   - "3.6"
-  - "3.6-dev" # 3.6 development branch
-  - "3.7-dev" # 3.7 development branch
+  - "3.7"
+  - "3.8"
+  - "3.9-dev"
   - "nightly"
 
 matrix:
   allow_failures:
-    - python: "3.6-dev"
-    - python: "3.7-dev"
+    - python: "3.9-dev"
     - python: "nightly"
 
 virtualenv:
@@ -27,15 +24,12 @@ services:
 install:
   - pip install -U pip
   - pip install wheel
-  - pip install psycopg2
-  - pip install sqlalchemy
-  - pip install flake8
-  - pip install coverage
-  - pip install nose
-  - pip install marshmallow --pre
+  - pip install sqlalchemy $SQLPYCLIENT
+  - pip install -U flake8 coverage pytest pytest-cov
   - pip install anyblok_marshmallow
   - pip install coveralls
-  - python setup.py develop
+  - pip install -U coveralls
+  - pip install .
 
 env:
   global:
@@ -44,9 +38,9 @@ env:
     - ANYBLOK_DATABASE_USER=postgres
 
 script:
-  - flake8 anyblok
+  - flake8 anyblok --exclude=*/tests/*
   - psql -c 'create database travis_ci_test;' -U postgres
-  - nosetests anyblok_mixins/tests -v -s --with-coverage --cover-package=anyblok_mixins
+  - pytest --cov-report= --cov=anyblok_mixins anyblok_mixins/tests
   
 after_success:
-  coveralls
+  coveralls --data_file=.coverage --config_file=.coveragerc
