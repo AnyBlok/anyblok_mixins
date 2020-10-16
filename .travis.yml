@@ -38,7 +38,7 @@ env:
     - ANYBLOK_DATABASE_USER=postgres
 
 script:
-  - flake8 anyblok --exclude=*/tests/*
+  - flake8 anyblok_mixins --exclude=*/tests/*
   - psql -c 'create database travis_ci_test;' -U postgres
   - pytest --cov-report= --cov=anyblok_mixins anyblok_mixins/tests
   
