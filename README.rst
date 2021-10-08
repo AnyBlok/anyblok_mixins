@@ -7,7 +7,7 @@
 .. obtain one at http://mozilla.org/MPL/2.0/.
 
 .. image:: https://img.shields.io/pypi/v/anyblok_mixins.svg
-   :target: https://pypi.python.org/pypi/anyblok/
+   :target: https://pypi.org/project/anyblok_mixins/
    :alt: Version status
 
 .. image:: https://travis-ci.org/AnyBlok/anyblok_mixins.svg?branch=master
